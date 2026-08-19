@@ -1,0 +1,54 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args: ["--maxkb=1024"]
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/adhtruong/mirrors-typos
+    rev: v1.49.0
+    hooks:
+      - id: typos
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.1
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+      - id: ruff-format
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.27.0
+    hooks:
+      - id: pyproject-fmt
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.12
+    hooks:
+      - id: actionlint
+  # Dogfooding. Both hooks run from the working tree rather than from a tag, so
+  # that a regression is caught before it is released rather than after.
+  - repo: local
+    hooks:
+      - id: check-env-example
+        name: check .env.example is in sync with the code
+        entry: uv run --quiet --no-project --refresh-package niccolomineo-pre-commit-hooks --with . -m check_env_example
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: check-version-consistency
+        name: check the project version is declared consistently
+        entry: uv run --quiet --no-project --refresh-package niccolomineo-pre-commit-hooks --with . -m check_version_consistency
+        language: system
+        pass_filenames: false
+        always_run: true
