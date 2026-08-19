@@ -1,0 +1,39 @@
+- id: check-env-example
+  name: check .env.example is in sync with the code
+  description: >-
+    Every environment variable read by the code must be documented in
+    .env.example, and every documented variable must be read by something.
+  entry: check-env-example
+  language: python
+  # The hook discovers the project's files itself: the "never read by the code"
+  # half of the check is only correct with the whole project in view, so a
+  # commit-time run and an --all-files run have to see the same thing.
+  pass_filenames: false
+  files: >-
+    (?x)^(
+      .*\.(py|js|jsx|mjs|cjs|ts|tsx|mts|cts|vue|svelte|astro|go|rs|rb|php)
+      |(.*/)?\.env\.(example|sample|template)
+      |(.*/)?env\.example
+      |(.*/)?(docker-)?compose[^/]*\.ya?ml
+      |(.*/)?(Dockerfile[^/]*|[^/]*\.Dockerfile|Containerfile[^/]*)
+    )$
+  minimum_pre_commit_version: "3.2.0"
+
+- id: check-version-consistency
+  name: check the project version is declared consistently
+  description: >-
+    Every version declared across the project's manifests, sources and
+    changelog must be the same one.
+  entry: check-version-consistency
+  language: python
+  # Comparing versions only means anything with every manifest in view, so the
+  # hook discovers them itself and behaves identically under --all-files.
+  pass_filenames: false
+  files: >-
+    (?x)^(
+      (.*/)?(pyproject\.toml|Cargo\.toml|package\.json|manifest\.json|setup\.cfg)
+      |(.*/)?Chart\.ya?ml
+      |(.*/)?(CHANGELOG|CHANGES|HISTORY|NEWS)\.md
+      |(.*/)?(__init__|version|_version|__version__)\.py
+    )$
+  minimum_pre_commit_version: "3.2.0"

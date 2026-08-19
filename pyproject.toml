@@ -1,0 +1,55 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = [ "hatchling" ]
+
+[project]
+name = "niccolomineo-pre-commit-hooks"
+version = "0.1.0"
+description = """\
+  Pre-commit hooks that catch the drift no test fails on: undocumented environment variables and disagreeing version \
+  declarations.\
+  """
+readme = "README.md"
+keywords = [
+  "changelog",
+  "dotenv",
+  "env",
+  "environment",
+  "hook",
+  "linter",
+  "pre-commit",
+  "prek",
+  "release",
+  "version",
+]
+license = "MIT"
+license-files = [ "LICENSE" ]
+authors = [ { name = "Niccolò Mineo", email = "niccolo@20tab.com" } ]
+requires-python = ">=3.11"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Quality Assurance",
+  "Typing :: Typed",
+]
+dependencies = []
+urls.Changelog = "https://github.com/niccolomineo/pre-commit-hooks/blob/main/CHANGELOG.md"
+urls.Homepage = "https://github.com/niccolomineo/pre-commit-hooks"
+urls.Issues = "https://github.com/niccolomineo/pre-commit-hooks/issues"
+scripts.check-env-example = "check_env_example.cli:main"
+scripts.check-version-consistency = "check_version_consistency.cli:main"
+
+[tool.hatch]
+build.targets.wheel.packages = [ "src/check_env_example", "src/check_version_consistency" ]
+
+[tool.ruff]
+line-length = 88
+lint.select = [ "ARG", "B", "C4", "E", "F", "I", "N", "PTH", "RUF", "SIM", "UP", "W" ]
+# unittest's own assertion helpers are camelCase, and so are the ones we add.
+lint.per-file-ignores."tests/*" = [ "N802" ]
